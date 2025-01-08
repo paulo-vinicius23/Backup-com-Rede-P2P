@@ -26,7 +26,7 @@ def list_networks(node_url: str) -> None:
 
 def main():
     """Main function to list networks of multiple IPFS nodes."""
-    node_urls = [
+    node_urls = [ 
         "http://localhost:5001",  # First node
         "http://localhost:5002"   # Second node
     ]
