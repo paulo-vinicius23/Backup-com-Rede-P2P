@@ -1,0 +1,1 @@
+Testando rede ipfs para backup com rede p2p.
