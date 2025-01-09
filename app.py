@@ -1,11 +1,10 @@
 import os
-
 import requests
+import subprocess  # Para executar o script de listagem
 
 
-def upload_file_to_ipfs(node_url: str, file_path: str) -> None:
+def upload_file_to_ipfs(node_url: str, file_path: str) -> str:
     """Upload a file to the specified IPFS node."""
-
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"File '{file_path}' not found.")
 
@@ -24,7 +23,6 @@ def upload_file_to_ipfs(node_url: str, file_path: str) -> None:
 
 def download_file_from_ipfs(node_url: str, file_hash: str, output_path: str) -> None:
     """Download a file from the specified IPFS node."""
-
     response = requests.post(f"{node_url}/api/v0/cat?arg={file_hash}")
 
     if response.status_code == 200:
@@ -38,18 +36,24 @@ def download_file_from_ipfs(node_url: str, file_hash: str, output_path: str) -> 
 
 
 def main():
-    """Main function to upload and download a file."""
+    """Main function to list networks, upload a file, and download it."""
+    # Step 1: Call the List.py script
+    print("Listing networks by calling List.py...\n")
+    subprocess.run(["python", "List.py"], check=True)
 
+    # Step 2: Proceed with upload and download
     node1_url = "http://localhost:5001"
     node2_url = "http://localhost:5002"
 
     file_to_upload = "test_file.txt"
 
     try:
+        print("\nUploading file to the first node...")
         uploaded_file_hash = upload_file_to_ipfs(
             node_url=node1_url, file_path=file_to_upload
         )
 
+        print("\nDownloading file from the second node...")
         output_file = "downloaded_testfile.txt"
         download_file_from_ipfs(
             node_url=node2_url, file_hash=uploaded_file_hash, output_path=output_file
